@@ -1,0 +1,23 @@
+CS 551 Assignment 2
+Matthew Daniel and Maria Kerner
+
+
+1) Implement in LLVM the delta dependence test as described in sections 2.3 and 3.4.1 of the text.
+
+We do not have a full implementation of the delta dependence test, but plan to complete this along with assignment 3.  Our original plan was to expand the existing LoopDependencyAnalysis LLVM pass.  Included in this submission is our attempt at finishing where LoopDependencyAnalysis left off.  We realized that our issue with the alias test was that we needed to invoke opt with -basic-aa to force the alias analysis to run.  Next we found that the implementation of IsAffine() wasn't correctly analysing subscripts, so we had to rewrite it. Our implementation starts with the array offset expression and walks down the AST until it hits a load instruction. It captures the multiplier and constant side of the add expression on the way down.  The subscript is then represented with coefficient, index variable, and constant value.  At this point, we added calculating the delta and testing for strong or weak SIV. 
+
+We moved to a Java implementation of subscript partitioning and SIV/MIV/ZIV classification of subscripts, mainly because we were running into too many issues with LLVM, and wanted to move forward in more familiar territory.  Included in partition.java are several tests that exercise partitioning and classification of subscripts, determining distance and direction vectors, and constraint tests. The plan is to continue with this approach to fully implement the delta test, including constraint propogation and handling RDIV subscripts. 
+
+
+
+2) Implement an LLVM pass that constructs the dependence graph as discussed in sections 2.2 and 2.4.3 of the text. You will only construct the graph for regions of code contained in loops. Your construction should work for the example in section 2.4.3. You should also provide a pass that produces a dot graph that can be viewed.
+
+The dependence graph is output as part of our LoopDependency LLVM pass. For each subscript pair where a dependence is detected in the pass, we add the necessary nodes and edges to the graph.  We analyze the subscript coeffients and constants to classify the dependence as True, Anti, or Output.  
+We ran into issues using the boost graph library to output the graph from within the LLVM pass, but were able to construct the .dot format manually, and convert to .tex and .jpg.  
+
+
+
+3) For extra credit implement some additional dependency tests from chapter 3.
+E.G. the SIV tests and subscript partitioning.
+
+We implemented subscript partitioning in java -- see partition.java.
