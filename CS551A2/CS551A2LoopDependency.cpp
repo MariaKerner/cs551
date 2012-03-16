@@ -674,7 +674,7 @@ CS551A2::analysePair(DependencePair *P) {
         if (P->Type[True]) label = label + "ẟ";
         if (P->Type[Anti])
         {
-            if (label.length > 0)
+            if (label.length() > 0)
             {
                 label = label + ",";
             }
@@ -682,7 +682,7 @@ CS551A2::analysePair(DependencePair *P) {
         }
         if (P->Type[Output])
         {
-            if (label.length > 0)
+            if (label.length() > 0)
             {
                 label = label + ",";
             }
